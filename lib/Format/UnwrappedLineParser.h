@@ -21,6 +21,7 @@
 #include "llvm/Support/Regex.h"
 #include <list>
 #include <stack>
+#include <sstream>
 
 namespace clang {
 namespace format {
@@ -35,7 +36,7 @@ struct UnwrappedLineNode;
 /// within an unwrapped line does not affect any other unwrapped lines.
 struct UnwrappedLine {
   UnwrappedLine();
-
+  std::string ToString()const noexcept;
   // FIXME: Don't use std::list here.
   /// The \c Tokens comprising this \c UnwrappedLine.
   std::list<UnwrappedLineNode> Tokens;
@@ -125,6 +126,7 @@ private:
   bool parseObjCProtocol();
   void parseJavaScriptEs6ImportExport();
   void parseStatementMacro();
+  void parseCSharpAttribute();
   bool tryToParseLambda();
   bool tryToParseLambdaIntroducer();
   void tryToParseJSFunction();
@@ -289,6 +291,16 @@ struct UnwrappedLineNode {
 inline UnwrappedLine::UnwrappedLine()
     : Level(0), InPPDirective(false), MustBeDeclaration(false),
       MatchingOpeningBlockLineIndex(kInvalidIndex) {}
+
+inline std::string UnwrappedLine::ToString()const noexcept
+{
+   std::ostringstream os;
+   for( const auto& token : Tokens )
+   {
+      os << token.Tok->TokenText.str() << " ";
+   }
+   return os.str();
+}
 
 } // end namespace format
 } // end namespace clang

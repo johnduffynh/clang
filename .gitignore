@@ -38,3 +38,4 @@ test/debuginfo-tests
 .vscode
 .vs
 
+test/Driver/Inputs/

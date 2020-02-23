@@ -36,6 +36,7 @@ enum LineType {
 
 class AnnotatedLine {
 public:
+   UnwrappedLine _line;
   AnnotatedLine(const UnwrappedLine &Line)
       : First(Line.Tokens.front().Tok), Level(Line.Level),
         MatchingOpeningBlockLineIndex(Line.MatchingOpeningBlockLineIndex),
@@ -44,8 +45,11 @@ public:
         MustBeDeclaration(Line.MustBeDeclaration), MightBeFunctionDecl(false),
         IsMultiVariableDeclStmt(false), Affected(false),
         LeadingEmptyLinesAffected(false), ChildrenAffected(false),
-        FirstStartColumn(Line.FirstStartColumn) {
-    assert(!Line.Tokens.empty());
+        FirstStartColumn(Line.FirstStartColumn),
+     _line{Line}
+   {
+     _line.ToString();
+      assert(!Line.Tokens.empty());
 
     // Calculate Next and Previous for all tokens. Note that we must overwrite
     // Next and Previous for every token, as previous formatting runs might have
